@@ -132,4 +132,17 @@ Earlier work in other domains:
 
 ---
 
+## License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License** (CC BY-NC-SA 4.0).
+
+You are free to **share** and **adapt** the material under the following terms:
+- **Attribution** – You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+- **NonCommercial** – You may not use the material for commercial purposes.
+- **ShareAlike** – If you remix, transform, or build upon the material, you must distribute your contributions under the same license.
+
+For commercial use, please contact the authors.
+
+---
+
 **Tribute**: We thank you for your attention and future collaboration, which advance the frontiers of information science and inspire our exploration across disciplines. 🙏
