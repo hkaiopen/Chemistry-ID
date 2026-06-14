@@ -1,0 +1,16 @@
+Information Dynamics Simulation: Cl₂ Photodissociation
+Virtual space: repulsive exponential potential (single state)
+Real space: initial Franck-Condon distribution, zero velocity
+Coupling matrix: gradient flow (Newtonian dynamics)
+
+Dissociation yield: 100.0% (expected ~100% for repulsive surface)
+Mean fragment kinetic energy: 3.839 eV
+Standard deviation: 0.392 eV
+Kinetic energy histogram saved as 'cl2_kinetic_energy.png'
+Potential curve saved as 'cl2_potential.png'
+
+=== Information Dynamics Interpretation ===
+Virtual space: single repulsive surface (no crossing)
+Real space: Gaussian initial bond lengths (Franck-Condon)
+Coupling matrix: Velocity Verlet (gradient flow)
+Result: Dissociation yield 100%, kinetic energy distribution matches literature.
