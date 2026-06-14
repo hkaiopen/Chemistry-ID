@@ -1,92 +1,34 @@
-===== Sensitivity scan of NaI photodissociation =====
-Scanning De_ionic (Morse well depth) ...
-De_ionic=2.5: yield=44.3%
-De_ionic=2.8: yield=50.0%
-De_ionic=3.0: yield=51.0%
-De_ionic=3.2: yield=50.7%
-De_ionic=3.5: yield=43.7%
+2D grid scan for NaI photodissociation
+Fixed initial velocity = 5.0 Å/ps
+Each grid point: 1000 trajectories, 3 independent seeds
 
---- Explanation for De_ionic scan ---
-De_ionic is the depth of the ionic Morse well. A very shallow well (low De_ionic)
-cannot hold the wavepacket long enough to reach the crossing; the molecule
-dissociates directly on the ionic surface without crossing -> low yield.
-A very deep well (high De_ionic) traps the wavepacket, requiring higher initial
-velocity to escape and reach the crossing; if the velocity is fixed, the yield
-decreases again. The optimum occurs at De_ionic ≈ 3.0 eV where the wavepacket
-has enough energy to cross but not too much to overshoot.
+De (eV)  coupling (eV)  yield (%) ± std
+--------------------------------------
+2.80      0.018          65.8   ± 0.21
+2.80      0.020          64.2   ± 1.15
+2.80      0.022          63.4   ± 1.42
+2.80      0.024          61.4   ± 0.95
+2.80      0.026          61.9   ± 1.11
+3.00      0.018          64.2   ± 1.16
+3.00      0.020          64.7   ± 1.71
+3.00      0.022          63.6   ± 1.27
+3.00      0.024          63.4   ± 0.15
+3.00      0.026          61.8   ± 1.19
+3.20      0.018          63.7   ± 0.35
+3.20      0.020          63.8   ± 1.19
+3.20      0.022          62.4   ± 1.97
+3.20      0.024          62.0   ± 1.59
+3.20      0.026          62.9   ± 2.15
+3.40      0.018          63.2   ± 1.31
+3.40      0.020          62.0   ± 1.07
+3.40      0.022          63.4   ± 0.78
+3.40      0.024          64.4   ± 0.46
+3.40      0.026          62.3   ± 1.07
 
+Scan completed in 465 seconds.
 
-Scanning initial_mean_v ...
-initial_mean_v=1.5: yield=45.3%
-initial_mean_v=2.0: yield=49.3%
-initial_mean_v=2.5: yield=49.3%
-initial_mean_v=3.0: yield=50.7%
-initial_mean_v=3.5: yield=50.3%
-initial_mean_v=4.0: yield=56.0%
-
---- Explanation for initial_mean_v scan ---
-The initial mean velocity determines the kinetic energy when approaching the crossing.
-Low velocity leads to slow passage through the crossing, which gives a low Landau‑Zener
-probability (adiabatic behavior, stays on ionic surface) -> low dissociation yield.
-High velocity increases the non‑adiabatic transition probability, but if too high,
-the wavepacket may cross too quickly and also the force may change; yield increases
-monotonically in the scanned range, so we extrapolate that very high velocities
-(e.g., 5.0 Å/ps) give the best yield (~65%).
-
-
-Scanning coupling V12 ...
-coupling=0.02: yield=58.3%
-coupling=0.04: yield=49.3%
-coupling=0.06: yield=37.3%
-coupling=0.08: yield=31.3%
-coupling=0.1: yield=22.3%
-
---- Explanation for coupling scan ---
-The electronic coupling V12 directly enters the Landau‑Zener exponent.
-Lower V12 gives lower transition probability? Wait: The exponent is negative, so
-smaller V12 -> less negative exponent -> larger P (more likely to switch).
-Thus decreasing coupling increases the dissociation yield, as seen in the scan.
-However, too low coupling (V12 → 0) makes the transition purely diabatic, which
-may also affect the energy distribution. In our range, lower = higher yield.
-
-
-=== Individually best parameters (from scans) ===
-Best De_ionic: 3.0 eV (yield=51.0%)
-Best initial_mean_v: 4.0 Å/ps (yield=56.0%)
-Best coupling: 0.02 eV (yield=58.3%)
-
-=== Automatic grid search for best parameter combination ===
-Refining around individually best values...
-De=2.70, v=3.0, c=0.010 → yield=57.6%
-De=2.70, v=3.0, c=0.025 → yield=58.2%
-De=2.70, v=3.0, c=0.040 → yield=54.4%
-De=2.70, v=4.0, c=0.010 → yield=61.8%
-De=2.70, v=4.0, c=0.025 → yield=61.2%
-De=2.70, v=4.0, c=0.040 → yield=52.8%
-De=2.70, v=5.0, c=0.010 → yield=63.2%
-De=2.70, v=5.0, c=0.025 → yield=65.0%
-De=2.70, v=5.0, c=0.040 → yield=55.6%
-De=3.00, v=3.0, c=0.010 → yield=56.8%
-De=3.00, v=3.0, c=0.025 → yield=61.6%
-De=3.00, v=3.0, c=0.040 → yield=52.6%
-De=3.00, v=4.0, c=0.010 → yield=63.4%
-De=3.00, v=4.0, c=0.025 → yield=59.4%
-De=3.00, v=4.0, c=0.040 → yield=54.0%
-De=3.00, v=5.0, c=0.010 → yield=64.4%
-De=3.00, v=5.0, c=0.025 → yield=59.6%
-De=3.00, v=5.0, c=0.040 → yield=58.6%
-De=3.30, v=3.0, c=0.010 → yield=59.4%
-De=3.30, v=3.0, c=0.025 → yield=61.0%
-De=3.30, v=3.0, c=0.040 → yield=51.8%
-De=3.30, v=4.0, c=0.010 → yield=65.0%
-De=3.30, v=4.0, c=0.025 → yield=60.4%
-De=3.30, v=4.0, c=0.040 → yield=56.2%
-De=3.30, v=5.0, c=0.010 → yield=64.8%
-De=3.30, v=5.0, c=0.025 → yield=65.8%
-De=3.30, v=5.0, c=0.040 → yield=56.0%
-
-Best combination found: De_ionic=3.30 eV, initial_mean_v=5.0 Å/ps, coupling=0.025 eV
-Maximum dissociation yield: 65.8% (target ~65%)
-
-Sensitivity scan completed. Figure saved as 'sensitivity_scan.png'.
-[Finished in 316.7s]
+Best combination: De = 3.00 eV, coupling = 0.020 eV → yield = 64.7% ± 1.71%
+Heatmap saved as '2d_scan_heatmap.png'
+Contour plot saved as '2d_scan_contour.png'
+Numerical results saved as '2d_scan_results.txt'.
+[Finished in 1274.5s]
