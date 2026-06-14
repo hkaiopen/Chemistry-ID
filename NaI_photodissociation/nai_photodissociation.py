@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Information Dynamics Simulation: NaI Photodissociation (v19)
+Information Dynamics Simulation: NaI Photodissociation
 ============================================================
 - Virtual space: two potential energy surfaces (ionic bound Morse + covalent dissociative linear)
 - Real space: Gaussian initial wavepacket (position and outward velocity)
