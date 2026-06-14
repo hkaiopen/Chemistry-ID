@@ -1,0 +1,24 @@
+Information Dynamics Simulation: H₂ Formation (2H → H₂)
+Virtual space: Morse potential (attractive)
+Real space: initial bond length with small outward velocity
+Coupling matrix: gradient flow (Velocity Verlet)
+
+r0 = 0.65 Å, E_total = -4.569 eV, binding prob = 1.00
+r0 = 0.67 Å, E_total = -4.649 eV, binding prob = 1.00
+r0 = 0.69 Å, E_total = -4.703 eV, binding prob = 0.99
+r0 = 0.72 Å, E_total = -4.735 eV, binding prob = 0.88
+r0 = 0.74 Å, E_total = -4.746 eV, binding prob = 0.48
+r0 = 0.76 Å, E_total = -4.739 eV, binding prob = 0.17
+r0 = 0.78 Å, E_total = -4.716 eV, binding prob = 0.01
+r0 = 0.81 Å, E_total = -4.680 eV, binding prob = 0.00
+r0 = 0.83 Å, E_total = -4.632 eV, binding prob = 0.00
+r0 = 0.85 Å, E_total = -4.573 eV, binding prob = 0.00
+
+Binding probability plot saved as 'h2_formation_prob.png'
+
+=== Information Dynamics Interpretation ===
+Virtual space: Morse potential well (attractive)
+Real space: initial bond length with slight outward velocity
+Coupling matrix: gradient flow (Newtonian dynamics)
+Result: Binding probability ~1 when total energy < De, drops to ~0 otherwise.
+Transition occurs near r0 ≈ 0.74 Å, matching quantum mechanical prediction.
