@@ -12,7 +12,7 @@ on a single repulsive potential.
 
 Outputs:
   - Dissociation yield (should be 100%)
-  - Fragment kinetic energy distribution
+  - Fragment kinetic energy distribution (relative kinetic energy of the two fragments)
   - Potential energy curve plot
 """
 
@@ -35,7 +35,10 @@ class Cl2Potential:
         return self.A * np.exp(-self.beta * (R - self.R0))
 
     def dV_dR(self, R):
-        """Derivative of potential (eV/Å)."""
+        """
+        Derivative of potential (eV/Å).
+        正确：dV/dR < 0，力 F = -dV/dR > 0（排斥）
+        """
         return -self.beta * self.A * np.exp(-self.beta * (R - self.R0))
 
 
@@ -57,27 +60,31 @@ class Cl2Trajectory:
         self.max_steps = max_steps
         self.mu = 35.453 / 2.0   # reduced mass of Cl₂ (amu)
         # Force conversion factor: 1 eV/Å -> acceleration in Å/ps² for mass in amu
-        # Derived from: 1 eV/Å = 1.602e-19 J / 1e-10 m = 1.602e-9 N
+        # 1 eV/Å = 1.602e-19 J / 1e-10 m = 1.602e-9 N
         # 1 amu = 1.6605e-27 kg -> a = F/m = (1.602e-9 N) / (1.6605e-27 kg) = 9.648e17 m/s²
         # 1 m/s² = 1e-14 Å/ps², so a (Å/ps²) = 9.648e17 * 1e-14 = 9648.5
         self.conv = 9648.5   # (Å/ps²) per (eV/Å) when mass in amu
 
     def acceleration(self, R):
         """Compute acceleration from force (Newton's 2nd law)."""
-        F = -self.pes.dV_dR(R)   # eV/Å
+        F = -self.pes.dV_dR(R)   # eV/Å, 力沿R增加方向为正
         a = F * self.conv / self.mu   # Å/ps²
         return a
 
     def run(self, tmax=2.0):
         """
         Propagate trajectory with Velocity Verlet.
-        Returns (dissociated, R_history, t_history).
+        Returns (dissociated, R_history, t_history, energy_drift).
         """
         t = 0.0
         R = self.R
         v = self.v
         R_hist = [R]
         t_hist = [t]
+        
+        # 初始总能量（用于能量守恒检查）
+        E_initial = 0.5 * self.mu * v**2 * 1.0364e-4 + self.pes.V(R)  # eV
+        max_energy_drift = 0.0
 
         while t < tmax and R < 15.0:
             a = self.acceleration(R)
@@ -94,11 +101,19 @@ class Cl2Trajectory:
             t += self.dt
             R_hist.append(R)
             t_hist.append(t)
+            
+            # 能量守恒检查
+            E_current = 0.5 * self.mu * v**2 * 1.0364e-4 + self.pes.V(R)
+            if E_initial != 0:
+                drift = abs((E_current - E_initial) / E_initial)
+                if drift > max_energy_drift:
+                    max_energy_drift = drift
+            
             # Dissociation condition: bond length > 6 Å
             if R > 6.0:
-                return True, R_hist, t_hist
+                return True, R_hist, t_hist, max_energy_drift
         # If not dissociated within tmax (should not happen for repulsive surface)
-        return False, R_hist, t_hist
+        return False, R_hist, t_hist, max_energy_drift
 
 
 def ensemble_simulation(n_traj=100):
@@ -106,13 +121,15 @@ def ensemble_simulation(n_traj=100):
     pes = Cl2Potential()
     diss_count = 0
     final_velocities = []
+    energy_drifts = []
 
     for _ in range(n_traj):
         # Real space: sample initial bond length from Gaussian (Franck-Condon region)
         R0_init = np.random.normal(loc=2.0, scale=0.05)   # mean 2.0 Å, width 0.05 Å
         # Initial velocity zero (vertical excitation)
         traj = Cl2Trajectory(pes, R0_init=R0_init, v0=0.0, dt=0.0005, max_steps=10000)
-        diss, R_hist, t_hist = traj.run(tmax=3.0)
+        diss, R_hist, t_hist, drift = traj.run(tmax=3.0)
+        energy_drifts.append(drift)
         if diss:
             diss_count += 1
             # Compute final velocity from last two points
@@ -121,11 +138,16 @@ def ensemble_simulation(n_traj=100):
                 final_velocities.append(v_final)
 
     yield_pct = diss_count / n_traj * 100.0
+    print(f"Max energy drift: {max(energy_drifts):.2e} (should be < 1e-6 for accurate integration)")
     return yield_pct, final_velocities
 
 
 def v_to_ke(v, mu_amu=35.453/2.0):
-    """Convert velocity (Å/ps) to kinetic energy (eV)."""
+    """
+    Convert relative velocity (Å/ps) to relative kinetic energy (eV).
+    注意：这是两个碎片之间的相对运动动能，不是单个碎片的平动能。
+    单个碎片平动能 = 相对动能 / 2（对于等质量碎片）。
+    """
     mu_kg = mu_amu * 1.66054e-27   # kg
     v_ms = v * 100.0               # Å/ps -> m/s
     ek_J = 0.5 * mu_kg * v_ms**2
@@ -144,16 +166,18 @@ def main():
     print(f"Dissociation yield: {yield_pct:.1f}% (expected ~100% for repulsive surface)")
 
     if v_finals:
+        # 相对运动动能（两个碎片的总平动能）
         ek_list = [v_to_ke(v) for v in v_finals]
-        print(f"Mean fragment kinetic energy: {np.mean(ek_list):.3f} eV")
+        print(f"Mean relative kinetic energy: {np.mean(ek_list):.3f} eV")
         print(f"Standard deviation: {np.std(ek_list):.3f} eV")
+        print(f"Mean kinetic energy per fragment: {np.mean(ek_list)/2:.3f} eV (for equal masses)")
 
         # Plot kinetic energy distribution
         plt.figure()
         plt.hist(ek_list, bins=30, density=True, alpha=0.7, color='green')
-        plt.xlabel('Kinetic energy (eV)')
+        plt.xlabel('Relative kinetic energy (eV)')
         plt.ylabel('Probability density')
-        plt.title('Cl₂ photodissociation: fragment kinetic energy distribution')
+        plt.title('Cl₂ photodissociation: fragment relative kinetic energy distribution')
         plt.grid(alpha=0.3)
         plt.savefig('cl2_kinetic_energy.png', dpi=150)
         plt.close()
