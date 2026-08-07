@@ -1,34 +1,43 @@
-2D grid scan for NaI photodissociation
-Fixed initial velocity = 5.0 Å/ps
-Each grid point: 1000 trajectories, 3 independent seeds
+2D grid scan for NaI photodissociation (Extended coupling)
+Trajectories per ensemble: 2000
+Ensembles per point: 5
+Using multi-processing on 4 cores.
+De range: [3.1, 3.2, 3.3]
+Coupling range: [0.03, 0.031, 0.032, 0.033, 0.034]
 
-De (eV)  coupling (eV)  yield (%) ± std
---------------------------------------
-2.80      0.018          65.8   ± 0.21
-2.80      0.020          64.2   ± 1.15
-2.80      0.022          63.4   ± 1.42
-2.80      0.024          61.4   ± 0.95
-2.80      0.026          61.9   ± 1.11
-3.00      0.018          64.2   ± 1.16
-3.00      0.020          64.7   ± 1.71
-3.00      0.022          63.6   ± 1.27
-3.00      0.024          63.4   ± 0.15
-3.00      0.026          61.8   ± 1.19
-3.20      0.018          63.7   ± 0.35
-3.20      0.020          63.8   ± 1.19
-3.20      0.022          62.4   ± 1.97
-3.20      0.024          62.0   ± 1.59
-3.20      0.026          62.9   ± 2.15
-3.40      0.018          63.2   ± 1.31
-3.40      0.020          62.0   ± 1.07
-3.40      0.022          63.4   ± 0.78
-3.40      0.024          64.4   ± 0.46
-3.40      0.026          62.3   ± 1.07
 
-Scan completed in 465 seconds.
+  0%|          | 0/15 [00:00<?, ?it/s]
+  7%|▋         | 1/15 [06:09<1:26:12, 369.48s/it]
+ 33%|███▎      | 5/15 [10:28<18:21, 110.13s/it]  
+ 40%|████      | 6/15 [11:25<14:39, 97.77s/it] 
+ 60%|██████    | 9/15 [16:07<09:34, 95.82s/it]
+ 67%|██████▋   | 10/15 [16:41<07:00, 84.01s/it]
+ 73%|███████▎  | 11/15 [17:49<05:22, 80.63s/it]
+ 87%|████████▋ | 13/15 [21:27<03:02, 91.44s/it]
+ 93%|█████████▎| 14/15 [21:39<01:14, 74.40s/it]
+100%|██████████| 15/15 [22:05<00:00, 63.06s/it]
+100%|██████████| 15/15 [22:05<00:00, 88.37s/it]
 
-Best combination: De = 3.00 eV, coupling = 0.020 eV → yield = 64.7% ± 1.71%
-Heatmap saved as '2d_scan_heatmap.png'
-Contour plot saved as '2d_scan_contour.png'
-Numerical results saved as '2d_scan_results.txt'.
-[Finished in 1274.5s]
+Scan completed in 1326 seconds.
+De = 3.10 eV, coupling = 0.030 eV → yield = 56.3% ± 1.31%
+De = 3.10 eV, coupling = 0.031 eV → yield = 59.5% ± 1.24%
+De = 3.10 eV, coupling = 0.032 eV → yield = 61.4% ± 1.48%
+De = 3.10 eV, coupling = 0.033 eV → yield = 63.1% ± 0.83%
+De = 3.10 eV, coupling = 0.034 eV → yield = 65.7% ± 0.33%
+De = 3.20 eV, coupling = 0.030 eV → yield = 56.8% ± 0.48%
+De = 3.20 eV, coupling = 0.031 eV → yield = 58.6% ± 1.92%
+De = 3.20 eV, coupling = 0.032 eV → yield = 61.8% ± 1.27%
+De = 3.20 eV, coupling = 0.033 eV → yield = 63.0% ± 0.88%
+De = 3.20 eV, coupling = 0.034 eV → yield = 65.6% ± 0.60%
+De = 3.30 eV, coupling = 0.030 eV → yield = 55.4% ± 1.07%
+De = 3.30 eV, coupling = 0.031 eV → yield = 59.1% ± 1.32%
+De = 3.30 eV, coupling = 0.032 eV → yield = 61.3% ± 0.88%
+De = 3.30 eV, coupling = 0.033 eV → yield = 63.4% ± 1.08%
+De = 3.30 eV, coupling = 0.034 eV → yield = 65.3% ± 1.49%
+
+>>> Best combination: De = 3.30 eV, coupling = 0.034 eV
+    yield = 65.3% ± 1.49% (target ~65%)
+Heatmap saved as '2d_scan_heatmap_extended.png'
+Contour plot saved as '2d_scan_contour_extended.png'
+Numerical results saved as '2d_scan_results_extended.txt'.
+[Finished in 1329.2s]
