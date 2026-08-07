@@ -1,9 +1,7 @@
-Potential curves saved as 'nai_potentials.png'
-Dissociation yield: 65.1% (target ~65%)
-Trajectory plot saved as 'nai_trajectories.png'
+Information Dynamics Simulation: NaI Photodissociation
+Virtual space: Morse well + dissociative slope
+Real space: Gaussian wavepacket, mean outward velocity = 5.0 Å/ps
+Coupling matrix: Landau-Zener (hopping covalent -> ionic)
+Initial state: covalent (repulsive branch)
 
-=== Information Dynamics Interpretation ===
-Virtual space: Morse well (De=3.0 eV) + dissociative slope
-Real space: Gaussian initial wavepacket, mean_v=5.0 Å/ps
-Coupling matrix: Landau-Zener (V12=0.02 eV)
-Result: Dissociation yield = 65.1% (target ~65%)
+Potential curves saved as 'nai_potentials.png'
