@@ -1,148 +1,158 @@
-# Chemistry-ID
+# Chemistry-ID: Information Dynamics for Chemical Reaction Simulations
 
-**Information dynamics provides a unified mathematical language for the subdisciplines of chemistry.**
+**Information dynamics provides a unified computational architecture for chemical reaction simulations**—integrating non-adiabatic dissociation (NaI), adiabatic dissociation (Cl₂), and formation (H₂) into a single abstract framework.
 
-This repository contains complete implementations of the information dynamics framework for **chemical reaction simulations**. Through three prototypical systems (NaI photodissociation, Cl₂ photodissociation, and H₂ formation), it demonstrates the universality of the framework. All code is original and aims to validate the “virtual space – real space – coupling matrix” three‑element framework for different reaction types (non‑adiabatic/adiabatic, dissociation/formation, two‑state/one‑state surfaces). The simulations reproduce the classic results of Zewail’s femtochemistry experiments (NaI dissociation yield ~65%) and provide a full numerical implementation.
 
-## Table of Contents
-- [Background: Information Dynamics for Chemical Reactions](#background-information-dynamics-for-chemical-reactions)
-- [Repository Structure](#repository-structure)
-- [Requirements](#requirements)
-- [Quick Start](#quick-start)
-- [Examples and Results](#examples-and-results)
-- [Citation](#citation)
-- [License](#license)
+---
 
-## Background: Information Dynamics for Chemical Reactions
-The core axiom of information dynamics states that the evolution of a system is determined by the **virtual space** (absolute ordered rules), the **real space** (variable observational data), and the **coupling matrix** (dynamic projection mechanism). In chemical reactions, this axiom maps as follows:
+## Overview
 
-* **Virtual space (potential energy surface rules)** – defines the absolute allowed regions for nuclear motion. For example, the ionic state (Morse well) and covalent state (repulsive/descending channel) of NaI.
-* **Real space (initial wave packet data)** – provides the observed distribution of initial positions and momenta (Franck‑Condon Gaussian distribution).
-* **Coupling matrix (projection mechanism)** – drives the system toward the steady‑state product. For a single PES it reduces to gradient flow (Newtonian mechanics); for two crossing PESs it becomes the Landau‑Zener non‑adiabatic transition probability.
+**Information Dynamics** reformulates chemical reactions as a three-element system:
 
-The code in this repository strictly follows these mappings, turning the abstract concept of “information flow” into executable Python.
+| Element | Description | Chemical Equivalent |
+|:---|:---|:---|
+| **Virtual Space** | Absolute rules defining allowed states | Potential Energy Surfaces (PESs) |
+| **Real Space** | Observational data with uncertainty | Initial wave packet distribution |
+| **Coupling Matrix** | Projection mechanism driving evolution | Gradient flow / Landau-Zener transitions |
 
-## Repository Structure
-```
-Chemistry-ID/
-├── NaI_photodissociation/            # NaI photodissociation (non‑adiabatic, two crossing surfaces)
-│   ├── nai_photodissociation.py      # main simulation script
-│   ├── nai_photodissociation_sensitivityscan.py # parameter scanning script
-│   ├── nai_potentials.png            # virtual space potential energy surfaces
-│   ├── nai_trajectories.png          # example trajectories (red=ionic, blue=covalent)
-│   ├── 2d_scan_heatmap.png           # 2D parameter heatmap
-│   ├── 2d_scan_contour.png           # 2D parameter contour plot
-│   ├── 2d_scan_results.txt           # detailed scanning results
-│   └── *.log                         # archived run logs
-│
-├── Cl2_photodissociation/            # Cl₂ photodissociation (adiabatic, single repulsive surface)
-│   ├── cl2_photodissociation.py      # main simulation script
-│   ├── cl2_potential.png             # virtual space potential curve
-│   ├── cl2_kinetic_energy.png        # fragment kinetic energy distribution
-│   └── *.log                         # archived run logs
-│
-├── H2_formation/                     # H₂ formation (attractive potential, bound state formation)
-│   ├── h2_formation.py               # main simulation script
-│   ├── h2_formation_prob.png         # binding probability vs. initial bond length
-│   └── *.log                         # archived run logs
-│
-└── README.md                         # this file
-```
+The framework demonstrates that three distinct reaction types—non-adiabatic dissociation (NaI), adiabatic dissociation (Cl₂), and formation (H₂)—can be described with the same abstract architecture, enabling consistent parameter calibration and cross-reaction comparison.
 
-## Requirements
-All code is written in Python 3.7+ and depends on the following standard libraries:
-- `numpy` (numerical calculations and random number generation)
-- `matplotlib` (plotting and visualisation)
-- `itertools`, `time`, `random`
+**Key features**:
+- Single code framework for three reaction types
+- Velocity Verlet integrator with energy conservation
+- Landau-Zener surface hopping for non-adiabatic transitions
+- Multi-ensemble statistics for robust error estimation
+- Parallel grid scanning for parameter calibration
 
-Install dependencies with:
-```bash
-pip install numpy matplotlib
-```
+---
 
 ## Quick Start
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/hkaiopen/Chemistry-ID.git
-   cd Chemistry-ID
-   ```
-2. **Run any simulation** (take NaI as example):
-   ```bash
-   cd NaI_photodissociation
-   python nai_photodissociation.py
-   ```
-   - The script runs 5 independent ensembles (2000 trajectories each) and outputs the mean dissociation yield, standard deviation, and 95% confidence interval.
-   - It also generates `nai_potentials.png` (PES plot) and `nai_trajectories.png` (trajectory plot).
-3. **Parameter scan (NaI)**:
-   ```bash
-   python nai_photodissociation_sensitivityscan.py
-   ```
-   - This script performs a 2D grid scan over `De_ionic` and `coupling`, automatically finds the parameter combination that gives a yield closest to 65%, and produces heatmaps and contour plots.
-4. **Run Cl₂ or H₂ simulations**:
-   ```bash
-   cd ../Cl2_photodissociation
-   python cl2_photodissociation.py
-   ```
 
-## Examples and Results
-### 1. NaI Photodissociation (non‑adiabatic, two crossing surfaces)
-- **Virtual space**: ionic state (Morse, De = 3.0 eV) + covalent state (linear descent)
-- **Coupling matrix**: Landau‑Zener probability
-- **Result**: dissociation yield 64.7% ± 1.71%, in excellent agreement with Zewail’s experiment (~65%).
+### Run all three simulations
 
-*Virtual space potential energy surfaces*:  
-![NaI PES](NaI_photodissociation/nai_potentials.png)
-*Example trajectories (red=ionic, blue=covalent)*:  
-![NaI trajectories](NaI_photodissociation/nai_trajectories.png)
+```bash
+# NaI photodissociation (default parameters: De=3.30 eV, V12=0.034 eV)
+cd NaI_photodissociation
+python nai_photodissociation_v2.py
 
-### 2. Cl₂ Photodissociation (adiabatic, single repulsive surface)
-- **Virtual space**: exponential repulsive potential \( V(R) = A e^{-\beta (R-R_0)} \)
-- **Coupling matrix**: gradient flow (Newtonian mechanics)
-- **Result**: dissociation yield 100%, mean fragment kinetic energy 3.84 eV (consistent with literature).
+# Cl₂ photodissociation
+cd ../Cl2_photodissociation
+python cl2_photodissociation.py
 
-*Potential curve*:  
-![Cl₂ PES](Cl2_photodissociation/cl2_potential.png)
-*Kinetic energy distribution*:  
-![Cl₂ KE distribution](Cl2_photodissociation/cl2_kinetic_energy.png)
-
-### 3. H₂ Formation (attractive potential, bound state formation)
-- **Virtual space**: Morse potential
-- **Coupling matrix**: gradient flow
-- **Result**: binding probability close to 1 when total energy is below the dissociation threshold, and drops to 0 above it.
-
-*Binding probability vs. initial bond length*:  
-![H₂ binding probability](H2_formation/h2_formation_prob.png)
-
-## Citation
-If you use this code or the information dynamics framework in your academic work, please cite the following papers (adapt as needed):
-
-```bibtex
-@article{Huang2026ChemistryID,
-  title   = {Information Dynamics Explains Chemical Reactions: A Unified Framework from NaI Photodissociation to H₂ Formation},
-  author  = {Kai Huang, Hongkui Liu, Ziwei Huang},
-  year    = {2026},
-  note    = {GitHub repository: \url{https://github.com/hkaiopen/Chemistry-ID}},
-  doi     = {10.5281/zenodo.XXXXXXX}   % optional
-}
+# H₂ formation (threshold behavior)
+cd ../H2_formation
+python h2_formation.py
 ```
 
-Earlier work in other domains:
-- **DNA assembly and RNA inverse folding**: Liu, H., & Huang, K. (2026). Validation of the Real-Imaginary Duality Principle in Core Challenges of Computational Biology. Zenodo. DOI:10.5281/zenodo.20057469
-- **Protein‑templated DNA synthesis**: Huang, K., Liu, H., & Huang, Z. (2026). An Information Dynamics Model of Protein-Templated DNA Synthesis. Zenodo. DOI:10.5281/zenodo.20496890
+### Run the NaI parameter scan
+
+```bash
+cd NaI_photodissociation
+python nai_photodissociation_sensitivityscan_v3\(终稿\).py
+```
+
+This performs a 2D grid scan over:
+- **De_ionic**: 2.8–3.4 eV (step 0.1 eV)
+- **V12 (coupling)**: 0.020–0.034 eV (step 0.002 eV)
+- Each point: 3 ensembles × 300 trajectories (coarse) or 5 × 2000 (refined)
+
+---
+
+## Results
+
+### 1. NaI Photodissociation
+
+**Model**: Non-adiabatic, two crossing PESs
+- **Virtual space**: Ionic state (Morse well, $D_e=3.30$ eV, $R_0=2.5$ Å) + covalent state (repulsive wall + linear descent)
+- **Real space**: Gaussian wavepacket ($\sigma_R=0.15$ Å), initial outward velocity $\bar{v}=5.0$ Å/ps, **initial state: covalent (repulsive branch)**
+- **Coupling matrix**: Landau-Zener probability ($V_{12}=0.034$ eV)
+
+**Result**:
+- Dissociation yield: **65.3% ± 1.5%**
+- Matches Zewail's experimental value: **65%**
+
+| Parameter | Value |
+|:---|:---|
+| $D_e$ (well depth) | **3.30 eV** |
+| $V_{12}$ (electronic coupling) | **0.034 eV** |
+| Simulated yield | **65.3% ± 1.5%** |
+| Experimental yield (Zewail) | ~65% |
+
+**Figures**:
+
+| Figure | Description |
+|:---|:---|
+| `nai_potentials.png` | Potential energy surfaces (ionic in red, covalent in blue) |
+| `nai_trajectories.png` | Example trajectories (red=ionic, blue=covalent) |
+| `2d_scan_heatmap_extended.png` | 2D parameter scan: yield vs. $D_e$ and $V_{12}$ |
+| `2d_scan_contour_extended.png` | Contour plot of the same scan |
+
+The system is initially prepared on the covalent (repulsive) state, corresponding to laser excitation. At the crossing ($R_c=6.9$ Å), a Landau-Zener transition may populate the ionic (bound) state. Trajectories that hop to ionic are trapped; those remaining on covalent dissociate.
+
+---
+
+### 2. Cl₂ Photodissociation
+
+**Model**: Adiabatic, single repulsive PES
+- **Virtual space**: Exponential repulsive potential $V(R) = 4.0\exp[-2.0(R-1.98)]$ eV
+- **Real space**: Gaussian wavepacket ($\sigma_R=0.05$ Å), zero initial velocity
+- **Coupling matrix**: Gradient flow (Velocity Verlet)
+
+**Result**:
+- Dissociation yield: **100%**
+- Mean relative kinetic energy: **3.84 ± 0.39 eV** (1.92 eV per fragment)
+
+| Quantity | Value |
+|:---|:---|
+| Dissociation yield | **100%** |
+| Mean relative kinetic energy | **3.84 ± 0.39 eV** |
+| Mean kinetic energy per fragment | **1.92 ± 0.20 eV** |
+| Literature range | 3.5–4.0 eV (total) |
+
+**Figures**:
+
+| Figure | Description |
+|:---|:---|
+| `cl2_potential.png` | Exponential repulsive potential |
+| `cl2_kinetic_energy.png` | Fragment kinetic energy distribution |
+
+---
+
+### 3. H₂ Formation
+
+**Model**: Attractive potential, bound state formation
+- **Virtual space**: Morse potential ($D_e=4.746$ eV, $\beta=1.942$ Å⁻¹, $R_0=0.741$ Å)
+- **Real space**: Fixed bond length at equilibrium, **scanning initial outward velocity** (0–600 Å/ps)
+- **Coupling matrix**: Gradient flow (Velocity Verlet)
+
+**Result**:
+- $E_{\text{tot}} < 0$ eV: binding probability **= 1.00** (trapped in Morse well)
+- $E_{\text{tot}} > 0$ eV: binding probability **drops to 0** (dissociation)
+- Sharp transition at the dissociation threshold
+
+| Condition | Binding Probability |
+|:---|:---|
+| $E_{\text{tot}} < D_e$ | **1.00** (bound) |
+| $E_{\text{tot}} > D_e$ | **0.00** (dissociated) |
+
+**Figures**:
+
+| Figure | Description |
+|:---|:---|
+| `h2_formation_prob.png` | Binding probability vs. initial velocity (threshold behavior) |
 
 ---
 
 ## License
 
-This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License** (CC BY-NC-SA 4.0).
+This work is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International License** .
 
-You are free to **share** and **adapt** the material under the following terms:
-- **Attribution** – You must give appropriate credit, provide a link to the license, and indicate if changes were made.
-- **NonCommercial** – You may not use the material for commercial purposes.
-- **ShareAlike** – If you remix, transform, or build upon the material, you must distribute your contributions under the same license.
+**You are free to**:
+- Share — copy and redistribute the material in any medium or format
+- Adapt — remix, transform, and build upon the material
 
-For commercial use, please contact the authors.
+**Under the following terms**:
+- **Attribution** — You must give appropriate credit, provide a link to the license
+- **NonCommercial** — You may not use the material for commercial purposes
 
----
-
-**Tribute**: We thank you for your attention and future collaboration, which advance the frontiers of information science and inspire our exploration across disciplines. 🙏
+For more information: https://creativecommons.org/licenses/by-nc/4.0/
