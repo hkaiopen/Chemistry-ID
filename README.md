@@ -33,7 +33,7 @@ The framework demonstrates that three distinct reaction types—non-adiabatic di
 ```bash
 # NaI photodissociation (default parameters: De=3.30 eV, V12=0.034 eV)
 cd NaI_photodissociation
-python nai_photodissociation_v2.py
+python nai_photodissociation.py
 
 # Cl₂ photodissociation
 cd ../Cl2_photodissociation
@@ -48,7 +48,7 @@ python h2_formation.py
 
 ```bash
 cd NaI_photodissociation
-python nai_photodissociation_sensitivityscan_v3\(终稿\).py
+python nai_photodissociation_sensitivityscan.py
 ```
 
 This performs a 2D grid scan over:
