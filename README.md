@@ -1,6 +1,6 @@
 # Chemistry-ID: Information Dynamics for Chemical Reaction Simulations
 
-**Information dynamics provides a unified computational architecture for chemical reaction simulations**—integrating non-adiabatic dissociation (NaI), adiabatic dissociation (Cl₂), and formation (H₂) into a single abstract framework.
+**Information dynamics provides a unified computational architecture for chemical reaction simulations**—integrating non-adiabatic dissociation (NaI), adiabatic dissociation (Cl₂), and formation (H₂) into a single abstract framework, plus a parameter-free D₂ isotope blind test of the same formulation.
 
 
 ---
@@ -15,7 +15,7 @@
 | **Real Space** | Observational data with uncertainty | Initial wave packet distribution |
 | **Coupling Matrix** | Projection mechanism driving evolution | Gradient flow / Landau-Zener transitions |
 
-The framework demonstrates that three distinct reaction types—non-adiabatic dissociation (NaI), adiabatic dissociation (Cl₂), and formation (H₂)—can be described with the same abstract architecture, enabling consistent parameter calibration and cross-reaction comparison.
+The framework demonstrates that three distinct reaction types—non-adiabatic dissociation (NaI), adiabatic dissociation (Cl₂), and formation (H₂)—can be described with the same abstract architecture, enabling consistent parameter calibration and cross-reaction comparison. The same formulation makes a parameter-free prediction for D₂ (Section 4): the binding threshold shifts by exactly $1/\sqrt{2}$ relative to H₂.
 
 **Key features**:
 - Single code framework for three reaction types
@@ -28,7 +28,7 @@ The framework demonstrates that three distinct reaction types—non-adiabatic di
 
 ## Quick Start
 
-### Run all three simulations
+### Run all three simulations (plus the D₂ blind test)
 
 ```bash
 # NaI photodissociation (default parameters: De=3.30 eV, V12=0.034 eV)
@@ -42,6 +42,9 @@ python cl2_photodissociation.py
 # H₂ formation (threshold behavior)
 cd ../H2_formation
 python h2_formation.py
+
+# D₂ isotope blind test (same Morse surface, doubled reduced mass)
+python d2_formation.py
 ```
 
 ### Run the NaI parameter scan
@@ -132,14 +135,34 @@ The system is initially prepared on the covalent (repulsive) state, correspondin
 
 | Condition | Binding Probability |
 |:---|:---|
-| $E_{\text{tot}} < D_e$ | **1.00** (bound) |
-| $E_{\text{tot}} > D_e$ | **0.00** (dissociated) |
+| $E_{\text{tot}} < 0$ | **1.00** (bound) |
+| $E_{\text{tot}} > 0$ | **0.00** (dissociated) |
 
 **Figures**:
 
 | Figure | Description |
 |:---|:---|
 | `h2_formation_prob.png` | Binding probability vs. initial velocity (threshold behavior) |
+
+---
+
+### 4. D₂ Isotope Blind Test
+
+**Model**: Same Morse virtual space as H₂, doubled reduced mass (Born–Oppenheimer: isotope-independent PES)
+- **Virtual space**: Morse potential ($D_e=4.746$ eV, $\beta=1.942$ Å⁻¹, $R_0=0.741$ Å) — identical to H₂
+- **Real space**: Fixed bond length at equilibrium, scanning initial outward velocity (0–600 Å/ps)
+- **Coupling matrix**: Gradient flow (Velocity Verlet)
+
+**Result** (no adjustable parameters):
+- Binding threshold: **≈298 Å/ps** for D₂ vs 426 Å/ps for H₂
+- Analytic prediction: 426.3/√2 = **301.5 Å/ps** — agreement within **1.2%**
+- The whole binding-probability step shifts by exactly $1/\sqrt{2}$, shape unchanged
+
+**Figures**:
+
+| Figure | Description |
+|:---|:---|
+| `d2_formation_prob.png` | Binding probability vs. initial velocity (step shifted by $1/\sqrt{2}$) |
 
 ---
 
