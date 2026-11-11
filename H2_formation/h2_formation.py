@@ -118,8 +118,8 @@ def main():
     print("Real space: fixed bond length, varying outward velocity")
     print("Coupling matrix: gradient flow (Newtonian dynamics)")
     print("Result: Binding probability drops to zero when total energy exceeds De.")
-    threshold_v = np.sqrt(2 * (De - V_morse(r0_fixed)) / (mu * 1.0364e-4))
-    print(f"Estimated threshold velocity: {threshold_v:.1f} Å/ps (kinetic energy = De - V(r0))")
+    threshold_v = np.sqrt(2 * De / (mu * 1.0364e-4))
+    print(f"Estimated threshold velocity: {threshold_v:.1f} Å/ps (kinetic energy = De)")
 
 if __name__ == "__main__":
     main()
