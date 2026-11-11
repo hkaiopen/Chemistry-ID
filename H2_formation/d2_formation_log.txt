@@ -1,0 +1,24 @@
+Information Dynamics Simulation: D2 Formation (2D -> D2) -- blind test
+Virtual space: Morse potential (attractive), same as H2
+Real space: fixed bond length, scan initial outward velocity
+Coupling matrix: gradient flow (Velocity Verlet)
+
+ v0 (A/ps)   E_total (eV)   binding prob
+-----------------------------------------
+    0.0       -4.746       1.00
+  100.0       -4.224       1.00
+  200.0       -2.657       1.00
+  300.0       -0.046       0.00
+  552.6       11.204       0.00
+  600.0       14.055       0.00
+
+Binding probability plot saved as 'd2_formation_prob.png'
+
+=== Information Dynamics Interpretation ===
+Virtual space: Morse potential well (attractive), same as H2
+Real space: fixed bond length, varying outward velocity
+Coupling matrix: gradient flow (Newtonian dynamics)
+Result: Binding probability drops to zero when total energy exceeds De.
+Blind test: threshold shifts by 1/sqrt(2) relative to H2, no adjustment.
+Estimated threshold velocity: 301.5 A/ps (kinetic energy = De)
+H2 analytic threshold 426.3 A/ps / sqrt(2) = 301.4 A/ps
